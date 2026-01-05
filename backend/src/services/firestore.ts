@@ -1,0 +1,42 @@
+import admin from "firebase-admin";
+
+const projectId = process.env.FIREBASE_PROJECT_ID;
+
+let db: admin.firestore.Firestore | null = null;
+
+if (projectId && process.env.GOOGLE_APPLICATION_CREDENTIALS) {
+  try {
+    if (!admin.apps.length) {
+      admin.initializeApp({
+        credential: admin.credential.applicationDefault(),
+        projectId,
+      });
+    }
+    db = admin.firestore();
+    console.log("✅ Firebase initialized successfully");
+  } catch (err) {
+    console.error("⚠️  Firebase initialization failed:", err);
+    console.log("⚠️  Backend will run without Firebase (memories won't be saved)");
+  }
+} else {
+  console.log("⚠️  Firebase not configured - set FIREBASE_PROJECT_ID and GOOGLE_APPLICATION_CREDENTIALS in .env");
+  console.log("⚠️  Backend will run without Firebase (memories won't be saved)");
+}
+
+export { db };
+
+export type Memory = {
+  text: string;
+  persona?: string;
+  createdAt: FirebaseFirestore.Timestamp;
+  tags?: string[];
+};
+
+export type Reminder = {
+  text: string;
+  persona?: string;
+  dueAt?: FirebaseFirestore.Timestamp | null;
+  status: "scheduled" | "sent" | "done";
+  createdAt: FirebaseFirestore.Timestamp;
+};
+

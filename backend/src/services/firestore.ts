@@ -7,8 +7,21 @@ let db: admin.firestore.Firestore | null = null;
 if (projectId && process.env.GOOGLE_APPLICATION_CREDENTIALS) {
   try {
     if (!admin.apps.length) {
+      let credential;
+      
+      // Check if GOOGLE_APPLICATION_CREDENTIALS is a JSON string (Railway) or file path (local)
+      const creds = process.env.GOOGLE_APPLICATION_CREDENTIALS;
+      if (creds.startsWith('{')) {
+        // It's a JSON string (Railway deployment)
+        const serviceAccount = JSON.parse(creds);
+        credential = admin.credential.cert(serviceAccount);
+      } else {
+        // It's a file path (local development)
+        credential = admin.credential.applicationDefault();
+      }
+      
       admin.initializeApp({
-        credential: admin.credential.applicationDefault(),
+        credential,
         projectId,
       });
     }

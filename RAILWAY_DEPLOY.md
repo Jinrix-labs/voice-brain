@@ -22,8 +22,11 @@ This guide will help you deploy both the frontend and backend to Railway.
 3. Railway will auto-detect the backend folder
 4. **Configure the service:**
    - **Root Directory:** `backend`
-   - **Build Command:** `npm install && npm run build`
+   - **Builder:** Select **"Nixpacks"** (NOT Docker)
+   - **Build Command:** `npm install && npm run build` (or leave empty, nixpacks.toml handles it)
    - **Start Command:** `npm start`
+
+**Important:** Make sure **"Nixpacks"** is selected as the builder, not Docker!
 
 ### Backend Environment Variables
 
@@ -49,8 +52,11 @@ GOOGLE_APPLICATION_CREDENTIALS={"type":"service_account","project_id":"...","pri
 2. Select **"GitHub Repo"** → Choose your repo
 3. **Configure the service:**
    - **Root Directory:** `web`
-   - **Build Command:** `npm install && npm run build`
+   - **Builder:** Select **"Nixpacks"** (NOT Docker)
+   - **Build Command:** `npm install && npm run build` (or leave empty, nixpacks.toml handles it)
    - **Start Command:** `npx serve -s dist -l $PORT`
+
+**Important:** Make sure **"Nixpacks"** is selected as the builder, not Docker!
 
 ### Frontend Environment Variables
 
@@ -104,6 +110,8 @@ VITE_API_BASE_URL=https://your-backend-service.railway.app
 ### Build fails
 - Check that all dependencies are in `package.json`
 - Verify Node.js version (Railway auto-detects, but you can set it in `nixpacks.toml`)
+- **If you see "npm: command not found"**: Make sure you selected **"Nixpacks"** as the builder, not Docker
+  - Go to service Settings → Build → Change builder to "Nixpacks"
 
 ## Quick Deploy Commands
 

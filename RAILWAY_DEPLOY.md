@@ -5,11 +5,11 @@ This guide will help you deploy both the frontend and backend to Railway.
 ## Prerequisites
 
 - GitHub account (your code is already pushed)
-- Railway account (sign up at https://railway.app)
+- Railway account (sign up at <https://railway.app>)
 
 ## Step 1: Create Railway Project
 
-1. Go to https://railway.app and sign in
+1. Go to <https://railway.app> and sign in
 2. Click **"New Project"**
 3. Select **"Deploy from GitHub repo"**
 4. Choose your repository: `Jinrix-labs/voice-brain`
@@ -22,11 +22,16 @@ This guide will help you deploy both the frontend and backend to Railway.
 3. Railway will auto-detect the backend folder
 4. **Configure the service:**
    - **Root Directory:** `backend`
-   - **Builder:** Select **"Nixpacks"** (NOT Docker)
-   - **Build Command:** `npm install && npm run build` (or leave empty, nixpacks.toml handles it)
+   - **Builder:** Select **"Nixpacks"** (NOT Docker) - **THIS IS CRITICAL!**
+   - **Build Command:** Leave empty (nixpacks.toml handles it)
    - **Start Command:** `npm start`
 
-**Important:** Make sure **"Nixpacks"** is selected as the builder, not Docker!
+**⚠️ CRITICAL:** After creating the service, you MUST change the builder:
+   1. Go to your service → **Settings** tab
+   2. Scroll to **"Build"** section
+   3. Change **"Builder"** from "Docker" to **"Nixpacks"**
+   4. Save changes
+   5. Redeploy the service
 
 ### Backend Environment Variables
 
@@ -39,6 +44,7 @@ GOOGLE_APPLICATION_CREDENTIALS={"type":"service_account","project_id":"...","pri
 ```
 
 **For Firebase credentials:**
+
 1. Open your `service-account.json` file locally
 2. Copy the **entire JSON content** (all of it, including the braces)
 3. Paste it as the value for `GOOGLE_APPLICATION_CREDENTIALS` in Railway
@@ -52,11 +58,16 @@ GOOGLE_APPLICATION_CREDENTIALS={"type":"service_account","project_id":"...","pri
 2. Select **"GitHub Repo"** → Choose your repo
 3. **Configure the service:**
    - **Root Directory:** `web`
-   - **Builder:** Select **"Nixpacks"** (NOT Docker)
-   - **Build Command:** `npm install && npm run build` (or leave empty, nixpacks.toml handles it)
+   - **Builder:** Select **"Nixpacks"** (NOT Docker) - **THIS IS CRITICAL!**
+   - **Build Command:** Leave empty (nixpacks.toml handles it)
    - **Start Command:** `npx serve -s dist -l $PORT`
 
-**Important:** Make sure **"Nixpacks"** is selected as the builder, not Docker!
+**⚠️ CRITICAL:** After creating the service, you MUST change the builder:
+   1. Go to your service → **Settings** tab
+   2. Scroll to **"Build"** section
+   3. Change **"Builder"** from "Docker" to **"Nixpacks"**
+   4. Save changes
+   5. Redeploy the service
 
 ### Frontend Environment Variables
 
@@ -77,7 +88,7 @@ VITE_API_BASE_URL=https://your-backend-service.railway.app
    - Frontend: `https://web-production-yyyy.up.railway.app`
 
 2. **Update your ElevenLabs agent:**
-   - Go to https://elevenlabs.io/app/conversational-ai
+   - Go to <https://elevenlabs.io/app/conversational-ai>
    - Edit your agent
    - Update tool endpoints to use your Railway backend URL:
      - `https://your-backend-url.railway.app/tool/save_memory`
@@ -98,20 +109,34 @@ VITE_API_BASE_URL=https://your-backend-service.railway.app
 ## Troubleshooting
 
 ### Backend won't start
+
 - Check that `PORT` environment variable is set
 - Verify Firebase credentials are correct
 - Check Railway logs for errors
 
 ### Frontend can't connect to backend
+
 - Verify `VITE_API_BASE_URL` is set correctly
 - Make sure backend is deployed and running
 - Check CORS settings (already enabled in backend)
 
-### Build fails
+### Build fails / "npm: command not found" error
+
+**This error means Railway is using Docker instead of Nixpacks!**
+
+**Fix:**
+1. Go to your Railway service dashboard
+2. Click **"Settings"** tab
+3. Scroll down to **"Build"** section
+4. Find **"Builder"** dropdown
+5. Change it from **"Docker"** to **"Nixpacks"**
+6. Click **"Save"**
+7. Go to **"Deployments"** tab and click **"Redeploy"**
+
+**Other checks:**
+- Verify `nixpacks.toml` exists in your service root directory (`backend/` or `web/`)
 - Check that all dependencies are in `package.json`
-- Verify Node.js version (Railway auto-detects, but you can set it in `nixpacks.toml`)
-- **If you see "npm: command not found"**: Make sure you selected **"Nixpacks"** as the builder, not Docker
-  - Go to service Settings → Build → Change builder to "Nixpacks"
+- Verify Node.js version (set in `nixpacks.toml`)
 
 ## Quick Deploy Commands
 
@@ -139,16 +164,17 @@ railway up
 ## Environment Variables Summary
 
 ### Backend
+
 - `PORT` - Server port (default: 4000, Railway sets this automatically)
 - `FIREBASE_PROJECT_ID` - Your Firebase project ID
 - `GOOGLE_APPLICATION_CREDENTIALS` - Firebase service account JSON (as string)
 
 ### Frontend
+
 - `VITE_ELEVENLABS_API_KEY` - Your ElevenLabs API key
 - `VITE_ELEVENLABS_AGENT_ID` - Your ElevenLabs agent ID
 - `VITE_API_BASE_URL` - Your backend Railway URL
 
-## 🎉 Done!
+## 🎉 Done
 
 Your app should now be live on Railway! Visit your frontend URL to test it out.
-

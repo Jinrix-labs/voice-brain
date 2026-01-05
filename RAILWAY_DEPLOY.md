@@ -19,20 +19,15 @@ This guide will help you deploy both the frontend and backend to Railway.
 
 1. In your Railway project, click **"New Service"**
 2. Select **"GitHub Repo"** → Choose your repo
-3. Railway will auto-detect the backend folder
-4. **Configure the service:**
-   - **Root Directory:** `backend`
-   - **Builder:** Select **"Nixpacks"** (NOT Docker) - **THIS IS CRITICAL!**
+3. **⚠️ IMMEDIATELY configure these settings (before first deploy):**
+   - Go to **Settings** tab
+   - Scroll to **"Source"** section → Set **"Root Directory"** to: `backend`
+   - Scroll to **"Build"** section → Set **"Builder"** to: **"Nixpacks"** (NOT Docker)
    - **Build Command:** Leave empty (nixpacks.toml handles it)
    - **Start Command:** `npm start`
+   - Click **"Save"**
 
-**⚠️ CRITICAL:** After creating the service, you MUST change the builder:
-
-   1. Go to your service → **Settings** tab
-   2. Scroll to **"Build"** section
-   3. Change **"Builder"** from "Docker" to **"Nixpacks"**
-   4. Save changes
-   5. Redeploy the service
+**Why Root Directory matters:** Without it, Railway builds from repo root (no package.json) and fails with "unable to generate build plan"!
 
 ### Backend Environment Variables
 
@@ -57,19 +52,15 @@ GOOGLE_APPLICATION_CREDENTIALS={"type":"service_account","project_id":"...","pri
 
 1. Click **"New Service"** again
 2. Select **"GitHub Repo"** → Choose your repo
-3. **Configure the service:**
-   - **Root Directory:** `web`
-   - **Builder:** Select **"Nixpacks"** (NOT Docker) - **THIS IS CRITICAL!**
+3. **⚠️ IMMEDIATELY configure these settings (before first deploy):**
+   - Go to **Settings** tab
+   - Scroll to **"Source"** section → Set **"Root Directory"** to: `web`
+   - Scroll to **"Build"** section → Set **"Builder"** to: **"Nixpacks"** (NOT Docker)
    - **Build Command:** Leave empty (nixpacks.toml handles it)
    - **Start Command:** `npx serve -s dist -l $PORT`
+   - Click **"Save"**
 
-**⚠️ CRITICAL:** After creating the service, you MUST change the builder:
-
-   1. Go to your service → **Settings** tab
-   2. Scroll to **"Build"** section
-   3. Change **"Builder"** from "Docker" to **"Nixpacks"**
-   4. Save changes
-   5. Redeploy the service
+**Why Root Directory matters:** Without it, Railway builds from repo root (no package.json) and fails with "unable to generate build plan"!
 
 ### Frontend Environment Variables
 

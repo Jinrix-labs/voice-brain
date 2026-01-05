@@ -27,6 +27,7 @@ This guide will help you deploy both the frontend and backend to Railway.
    - **Start Command:** `npm start`
 
 **⚠️ CRITICAL:** After creating the service, you MUST change the builder:
+
    1. Go to your service → **Settings** tab
    2. Scroll to **"Build"** section
    3. Change **"Builder"** from "Docker" to **"Nixpacks"**
@@ -63,6 +64,7 @@ GOOGLE_APPLICATION_CREDENTIALS={"type":"service_account","project_id":"...","pri
    - **Start Command:** `npx serve -s dist -l $PORT`
 
 **⚠️ CRITICAL:** After creating the service, you MUST change the builder:
+
    1. Go to your service → **Settings** tab
    2. Scroll to **"Build"** section
    3. Change **"Builder"** from "Docker" to **"Nixpacks"**
@@ -125,6 +127,7 @@ VITE_API_BASE_URL=https://your-backend-service.railway.app
 **This error means Railway is using Docker instead of Nixpacks!**
 
 **Fix:**
+
 1. Go to your Railway service dashboard
 2. Click **"Settings"** tab
 3. Scroll down to **"Build"** section
@@ -134,6 +137,7 @@ VITE_API_BASE_URL=https://your-backend-service.railway.app
 7. Go to **"Deployments"** tab and click **"Redeploy"**
 
 **Other checks:**
+
 - Verify `nixpacks.toml` exists in your service root directory (`backend/` or `web/`)
 - Check that all dependencies are in `package.json`
 - Verify Node.js version (set in `nixpacks.toml`)

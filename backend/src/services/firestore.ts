@@ -9,10 +9,10 @@ if (projectId && process.env.GOOGLE_APPLICATION_CREDENTIALS) {
     if (!admin.apps.length) {
       let credential;
       
-      // Check if GOOGLE_APPLICATION_CREDENTIALS is a JSON string (Railway) or file path (local)
+      // Check if GOOGLE_APPLICATION_CREDENTIALS is a JSON string (Vercel/cloud) or file path (local)
       const creds = process.env.GOOGLE_APPLICATION_CREDENTIALS;
       if (creds.startsWith('{')) {
-        // It's a JSON string (Railway deployment)
+        // It's a JSON string (cloud deployment)
         const serviceAccount = JSON.parse(creds);
         credential = admin.credential.cert(serviceAccount);
       } else {

@@ -39,10 +39,18 @@ app.get("/", (_, res) => {
   res.json({ status: "backend alive" });
 });
 
+// Export for Vercel serverless functions
+// Vercel's @vercel/node builder expects the Express app as default export
+export default app;
+
+// Only start server if not running on Vercel
 const PORT = process.env.PORT || 4000;
 
-app.listen(PORT, () => {
-  console.log(`🚀 Backend running on http://localhost:${PORT}`);
-  console.log(`📝 Environment: ${process.env.FIREBASE_PROJECT_ID ? "Firebase configured" : "⚠️  Firebase not configured - add .env file"}`);
-});
+// Check if we're running on Vercel (Vercel sets VERCEL env var)
+if (process.env.VERCEL !== "1") {
+  app.listen(PORT, () => {
+    console.log(`🚀 Backend running on http://localhost:${PORT}`);
+    console.log(`📝 Environment: ${process.env.FIREBASE_PROJECT_ID ? "Firebase configured" : "⚠️  Firebase not configured - add .env file"}`);
+  });
+}
 

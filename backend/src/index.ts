@@ -40,7 +40,8 @@ app.get("/", (_, res) => {
 });
 
 // Export for Vercel serverless functions
-// Vercel's @vercel/node builder expects the Express app as default export
+// Vercel's @vercel/node builder handles TypeScript and CommonJS
+module.exports = app;
 export default app;
 
 // Only start server if not running on Vercel

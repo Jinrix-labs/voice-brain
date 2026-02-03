@@ -5,10 +5,10 @@ import admin from "firebase-admin";
 const router = Router();
 
 router.post("/create", async (req, res) => {
-  const { userId, text, dueAt, persona } = req.body;
+  const { userId = "default", text, dueAt, persona } = req.body;
 
-  if (!userId || !text) {
-    return res.status(400).json({ error: "userId and text are required" });
+  if (!text) {
+    return res.status(400).json({ error: "text is required" });
   }
 
   if (!db) {

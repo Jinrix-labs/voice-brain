@@ -4,10 +4,10 @@ import { saveMemory, searchMemories } from "../services/memoryService";
 const router = Router();
 
 router.post("/save", async (req, res) => {
-  const { userId, text, persona, tags } = req.body;
+  const { userId = "default", text, persona, tags } = req.body;
 
-  if (!userId || !text) {
-    return res.status(400).json({ error: "userId and text are required" });
+  if (!text) {
+    return res.status(400).json({ error: "text is required" });
   }
 
   try {

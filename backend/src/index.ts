@@ -8,6 +8,12 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Log every request (helps debug Railway / ElevenLabs tool calls)
+app.use((req, _res, next) => {
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+  next();
+});
+
 // Mount routes
 app.use("/tool/memory", memoryRouter);
 app.use("/tool/reminder", reminderRouter);

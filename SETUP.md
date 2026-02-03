@@ -39,6 +39,7 @@ Create `web/.env`:
 ```env
 VITE_ELEVENLABS_API_KEY=sk_your_api_key_here
 VITE_ELEVENLABS_AGENT_ID=agent_your_agent_id_here
+# Backend URL (local dev vs production). Used when the frontend calls the API.
 VITE_API_BASE_URL=http://localhost:4000
 
 # Optional: Different voices per persona (see VOICE_SETUP.md)
@@ -78,7 +79,7 @@ VITE_API_BASE_URL=http://localhost:4000
        "required": ["text"]
      }
      ```
-   - **Endpoint:** `http://localhost:4000/tool/save_memory`
+   - **Endpoint:** `http://localhost:4000/tool/save_memory` (use your Railway URL in production; see "Backend on Railway" below)
    - **Method:** POST
 
 6. Copy the **Agent ID** from the URL or settings
@@ -162,6 +163,32 @@ The app has 4 personas with different personalities:
 - Make sure backend is running on port 4000
 - Check that the tool endpoint is configured correctly in ElevenLabs
 - Verify the agent has the `save_memory` tool added
+
+---
+
+## 🚂 Backend on Railway
+
+When your backend is deployed on Railway:
+
+1. **Railway env vars**  
+   In the Railway project, add the same variables as in `backend/.env` (e.g. Firebase). Do **not** set `PORT`; Railway sets it for you.
+
+2. **ElevenLabs tool webhooks**  
+   The agent calls your backend when it uses the memory/reminder tools. Update the tool URLs in the ElevenLabs dashboard:
+   - Open your agent → **Tools** (e.g. [ElevenLabs Conversational AI](https://elevenlabs.io/app/conversational-ai))
+   - For **save_memory**: set **Endpoint** to  
+     `https://YOUR-RAILWAY-APP.up.railway.app/tool/save_memory`
+   - For **reminder** (if you added it): set **Endpoint** to  
+     `https://YOUR-RAILWAY-APP.up.railway.app/tool/reminder`  
+     (or the exact path your reminder tool uses)
+   - Use your real Railway URL (e.g. `https://voice-brain-backend.up.railway.app`).
+
+3. **Web app (optional)**  
+   If the frontend ever calls the backend directly, set in `web/.env` (or your host’s env):
+   ```env
+   VITE_API_BASE_URL=https://YOUR-RAILWAY-APP.up.railway.app
+   ```
+   The app uses this via `src/config.ts` (`API_BASE_URL`).
 
 ---
 

@@ -45,6 +45,12 @@ app.get("/", (_, res) => {
   res.json({ status: "backend alive" });
 });
 
+// Debug: confirm Railway is reachable and logging works (hit this in browser or curl)
+app.get("/tool/ping", (_, res) => {
+  console.log("✅ /tool/ping hit - backend is reachable from the internet");
+  res.json({ ok: true, message: "backend reachable", ts: new Date().toISOString() });
+});
+
 // Export for Vercel serverless functions
 // Vercel's @vercel/node builder handles TypeScript and CommonJS
 module.exports = app;

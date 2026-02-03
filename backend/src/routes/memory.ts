@@ -4,9 +4,19 @@ import { saveMemory, searchMemories } from "../services/memoryService";
 const router = Router();
 
 router.post("/save", async (req, res) => {
-  const { userId = "default", text, persona, tags } = req.body;
+  // Accept text from body or nested (ElevenLabs may send input/arguments)
+  const body = req.body || {};
+  const text =
+    body.text ??
+    body.input?.text ??
+    (typeof body.arguments === "object" && body.arguments?.text) ??
+    (typeof body.input === "string" ? body.input : undefined);
+  const userId = body.userId ?? body.input?.userId ?? "default";
+  const persona = body.persona ?? body.input?.persona;
+  const tags = body.tags ?? body.input?.tags;
 
   if (!text) {
+    console.log("⚠️ /tool/memory/save missing text, body:", JSON.stringify(body));
     return res.status(400).json({ error: "text is required" });
   }
 

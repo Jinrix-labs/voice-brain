@@ -264,6 +264,20 @@ backend/
 └── package.json
 ```
 
+## 🚀 Deploy to Vercel
+
+1. **Push** the repo to GitHub (if not already).
+2. In [vercel.com](https://vercel.com) → **Add New Project** → import the repo.
+3. Set **Root Directory** to `backend` (no trailing slash). Save.
+4. **Build & dev:** Leave **Build Command** empty or `npm run build`. **Output Directory** can stay default. **Install Command:** `npm install`.
+5. **Environment variables:** In Project → Settings → Environment Variables, add the same vars as in `.env` (e.g. `FIREBASE_PROJECT_ID`, `GOOGLE_APPLICATION_CREDENTIALS` as the full JSON string). Do **not** set `PORT`.
+6. **Deploy.** Your backend URL will be like `https://your-project.vercel.app`.
+7. **ElevenLabs:** In your agent’s tools, set the **Endpoint** URLs to your Vercel URL:
+   - save_memory: `https://your-project.vercel.app/tool/save_memory` or `.../tool/memory/save`
+   - create_reminder: `https://your-project.vercel.app/tool/reminder/create`
+
+**How it works:** `vercel.json` rewrites all requests to `api/index.ts`, which exports the Express app from `src/index.ts`. The app handles `/`, `/tool/ping`, `/tool/save_memory`, `/tool/memory/*`, and `/tool/reminder/*`.
+
 ## ⚠️ Notes
 
 - Backend will run without Firebase, but memories/reminders won't persist
